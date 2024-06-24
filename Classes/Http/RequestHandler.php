@@ -146,14 +146,9 @@ class RequestHandler implements RequestHandlerInterface
             // already - this is due to the fact that the `PageRenderer` state has been serialized
             // before and note executed via `$pageRenderer->render()` and did not consume any nonce values
             // (see serialization in `generatePageContent()`).
-            if ($nonce instanceof ConsumableNonce && (count($nonce) > 0 || $controller->isINTincScript())) {
-                // nonce was consumed
-                $controller->config['INTincScript'][] = [
-                    'target' => NonceValueSubstitution::class . '->substituteNonce',
-                    'parameters' => ['nonce' => $nonce->value],
-                    'permanent' => true,
-                ];
-            }
+
+            // this code is removed due to the fact, that nonces should not prevent the page from caching, 
+            // as the nonce is later on inserted from the webserver itself IN the CACHED page. 
 
             $controller->generatePage_postProcessing($request);
             $this->timeTracker->pull();
